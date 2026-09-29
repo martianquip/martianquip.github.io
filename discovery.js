@@ -70,6 +70,15 @@ const Discovery = (()=>{
     if(tagged||named)return 'peat';
     return ['스카치위스키','스카치'].includes(catalog.origin)?'scotch':null;
   }
+  function purchasePrice(record){return Number.isFinite(record.price)&&record.price>=0?record.price:null;}
+  function comparePurchasePrice(a,b,order){
+    const left=purchasePrice(a),right=purchasePrice(b);
+    if((left===null)!==(right===null))return left===null?1:-1;
+    if(left!==null&&left!==right)return (order==='price_desc'?-1:1)*(left-right);
+    const leftDate=a.published||'',rightDate=b.published||'';
+    if(leftDate!==rightDate)return leftDate>rightDate?-1:1;
+    return String(a.id)<String(b.id)?-1:String(a.id)>String(b.id)?1:0;
+  }
   function bottlePrice(record){
     const {price,volume}=record;
     const miniature=/미니어[처쳐]|미니\s*보틀|세트|miniature|\bmini\b|\bset\b/i.test([record.name,record.english].join(' '));
@@ -139,5 +148,5 @@ const Discovery = (()=>{
     const reason=any?'각 갈림길에서 하나씩 고르는 3단계 경로입니다. 다음 단계는 실제 경험 후 달라질 수 있으며, 지수는 만족 확률이 아닙니다. 가격은 리뷰 당시 기록으로 현재 판매가가 아닙니다. 확인된 보틀 가격만 합산하고 미확인은 별도로 셉니다.':capped?'선택한 경험·예산 조건에 맞고 보틀 가격이 확인되는 다음 제품을 찾지 못했습니다. 예산을 조정하거나 제한을 해제해 주세요.':'선택한 경험과 향미가 겹치는 다음 제품을 찾지 못했습니다. 다른 기준 제품을 추가해 주세요.';
     return {branches,reason,anchorMode};
   }
-  return {profile,axes,recommend,similarity,journeyClass,bottlePrice,productKey,journey};
+  return {profile,axes,recommend,similarity,journeyClass,bottlePrice,purchasePrice,comparePurchasePrice,productKey,journey};
 })();

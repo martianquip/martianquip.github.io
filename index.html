@@ -9,11 +9,11 @@
   <title>MARTIANQUIP · Taste Atlas</title>
   <link rel="icon" href="./brand.png?v=mq-monster-20260929" type="image/png">
   <link rel="apple-touch-icon" href="./brand.png?v=mq-monster-20260929">
-  <link rel="stylesheet" href="./public-view.css?v=journey-20260930">
-  <script src="./discovery.js?v=journey-20260930" defer></script>
-  <link rel="stylesheet" href="./journey.css?v=journey-20260930">
-  <script src="./journey.js?v=journey-20260930" defer></script>
-  <script src="./public-view.js?v=journey-20260930" defer></script>
+  <link rel="stylesheet" href="./public-view.css?v=price-sort-20260930">
+  <script src="./discovery.js?v=price-sort-20260930" defer></script>
+  <link rel="stylesheet" href="./journey.css?v=price-sort-20260930">
+  <script src="./journey.js?v=price-sort-20260930" defer></script>
+  <script src="./public-view.js?v=price-sort-20260930" defer></script>
 </head>
 <body>
   <header class="site-header"><a class="brand" href="./" aria-label="MARTIANQUIP 홈"><img src="./brand.png?v=mq-monster-20260929" width="56" height="56" alt=""><span class="brand-copy">MARTIANQUIP<small>TASTE ATLAS</small></span></a><a class="blog-link" href="https://blog.naver.com/martianquip" target="_blank" rel="noopener noreferrer">블로그 ↗</a></header>
@@ -28,7 +28,7 @@
     <section class="hero"><p class="eyebrow">향과 맛을 따라가는 리뷰 아카이브</p><h1>한 잔에 담긴<br><em>서로 다른 이야기.</em></h1><p>위스키, 에너지드링크, 전통주부터 한 번쯤 궁금했던 음료까지.<br>종류와 캐스크를 고르고, 향·맛·여운을 살펴보세요.</p><div id="summary" class="hero-stat">리뷰를 불러오는 중…</div></section>
     <section class="visitor-strip" aria-label="방문 통계"><div><span>전체 방문자</span><b id="total-visitors">연결 중</b></div><div><span>오늘 방문자</span><b id="today-visitors">연결 중</b></div><div><span>전체 조회</span><b id="total-views">연결 중</b></div><div><span>오늘 조회</span><b id="today-views">연결 중</b></div><p id="analytics-status">브라우저 쿠키 기준 · 오늘은 한국 시간</p></section>
     <section class="library" aria-label="리뷰 탐색">
-      <div class="filters"><label class="search-label">제품 검색<input id="search" type="search" placeholder="제품명, 증류소, 국가 검색"></label><label>종류<select id="type"><option value="">모든 종류</option></select></label><label>캐스크<select id="cask"><option value="">모든 캐스크</option></select></label><label>세부 분류<select id="subtype"><option value="">모든 세부 분류</option></select></label><label>정렬<select id="sort" aria-describedby="sort-note"><option value="newest">최신 리뷰순</option><option value="rating_desc">별점 높은 순</option><option value="rating_asc">별점 낮은 순</option></select></label><button id="reset" class="quiet-button" type="button">초기화</button></div>
+      <div class="filters"><label class="search-label">제품 검색<input id="search" type="search" placeholder="제품명, 증류소, 국가 검색"></label><label>종류<select id="type"><option value="">모든 종류</option></select></label><label>캐스크<select id="cask"><option value="">모든 캐스크</option></select></label><label>세부 분류<select id="subtype"><option value="">모든 세부 분류</option></select></label><label>정렬<select id="sort" aria-describedby="sort-note"><option value="newest">최신 리뷰순</option><option value="rating_desc">별점 높은 순</option><option value="rating_asc">별점 낮은 순</option><option value="price_asc">가격 낮은 순</option><option value="price_desc">가격 높은 순</option></select></label><button id="reset" class="quiet-button" type="button">초기화</button></div>
       <p id="sort-note" class="sort-note">별점 정렬 기준: 추정 종합 별점 · 미평가 제품은 마지막</p><div class="results-line"><h2>리뷰 컬렉션</h2><span id="count" aria-live="polite"></span></div><div id="cards" class="cards"><p>잠시만 기다려 주세요.</p></div><nav class="pagination" aria-label="리뷰 페이지"><button id="previous-page" type="button">← 이전</button><span id="page-label" aria-live="polite"></span><button id="next-page" type="button">다음 →</button></nav>
     </section>
     </div>
