@@ -52,18 +52,29 @@ const badge=text=>`<span class="badge">${esc(text)}</span>`;
 function safeImage(url){try{const parsed=new URL(url,location.href);return url&&((parsed.origin===location.origin&&url.startsWith('./assets/'))||parsed.protocol==='https:')?url:'';}catch{return '';}}
 function photo(record,large=false){const attrs=imageAttributes(record.catalog.photo_url);return attrs?`<img class="product-photo${large?' large':''}" ${attrs} alt="${esc(record.name)} 제품 사진" loading="lazy" referrerpolicy="no-referrer">`:`<div class="photo-placeholder${large?' large':''}" aria-label="제품 사진 미확인"><span>▱</span><small>사진 미확인</small></div>`;}
 function fillOptions(selector,values){const select=$(selector);[...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko')).forEach(value=>select.add(new Option(value,value)));}
+function reviewScore(record){const value=record.liking_estimates?.score?.value;return Number.isFinite(value)?value:null;}
+function compareReviews(a,b,sort){
+  if(sort==='rating_desc'||sort==='rating_asc'){
+    const left=reviewScore(a),right=reviewScore(b);
+    if((left===null)!==(right===null))return left===null?1:-1;
+    if(left!==null&&left!==right)return (sort==='rating_asc'?1:-1)*(left-right);
+  }
+  const leftDate=a.published||'',rightDate=b.published||'';
+  if(leftDate!==rightDate)return leftDate>rightDate?-1:1;
+  return String(a.id)<String(b.id)?-1:String(a.id)>String(b.id)?1:0;
+}
 async function requestJson(url,options){const response=await fetch(url,{cache:'no-cache',...options});const result=await response.json();if(!response.ok)throw new Error(result.error||'요청을 처리하지 못했습니다.');return result;}
 function showCounters(data){for(const [id,key] of [['total-visitors','total_visitors'],['today-visitors','today_visitors'],['total-views','total_views'],['today-views','today_views']])$('#'+id).textContent=data&&Number.isFinite(data[key])?data[key].toLocaleString('ko-KR'):'연결 안됨';$('#analytics-status').textContent=data?'브라우저 쿠키 기준 · 오늘은 한국 시간':'방문자 집계 연결 안됨';}
 let analyticsQueue=Promise.resolve();
 function trackView(page){if(state.mode!=='server'){showCounters(null);return Promise.resolve();}const eventId=crypto.randomUUID();analyticsQueue=analyticsQueue.then(async()=>{try{const data=await requestJson('./api/analytics/event',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page,event_id:eventId})});showCounters(data);}catch{showCounters(null);}});return analyticsQueue;}
 async function render(){
   const version=++state.request;
-  const query=$('#search').value.trim().toLowerCase(),type=$('#type').value,cask=$('#cask').value,subtype=$('#subtype').value;
+  const query=$('#search').value.trim().toLowerCase(),type=$('#type').value,cask=$('#cask').value,subtype=$('#subtype').value,sort=$('#sort').value;
   let rows;
-  try{if(state.mode==='server'){const params=new URLSearchParams({page:String(state.page),limit:'24',q:query,type,cask,subtype});const data=await requestJson('./api/public/catalog?'+params);if(version!==state.request)return;rows=data.reviews;state.total=data.total;state.pages=data.pages;}else{const all=state.reviews.filter(r=>!r.is_collection&&(!type||r.catalog.primary_type===type)&&(!cask||r.catalog.casks?.includes(cask))&&(!subtype||r.catalog.subtypes?.includes(subtype))&&(!query||[r.name,r.english,r.catalog.country,r.catalog.region,r.catalog.distillery].join(' ').toLowerCase().includes(query)));state.total=all.length;state.pages=Math.ceil(all.length/24);rows=all.slice((state.page-1)*24,state.page*24);}}catch(error){if(version!==state.request)return;$('#cards').innerHTML=`<div class="empty"><h3>${esc(error.message)}</h3><p>잠시 후 다시 시도해 주세요.</p></div>`;$('#count').textContent='연결 안됨';return;}
+  try{if(state.mode==='server'){const params=new URLSearchParams({page:String(state.page),limit:'24',q:query,type,cask,subtype,sort});const data=await requestJson('./api/public/catalog?'+params);if(version!==state.request)return;rows=data.reviews;state.total=data.total;state.pages=data.pages;}else{const all=state.reviews.filter(r=>!r.is_collection&&(!type||r.catalog.primary_type===type)&&(!cask||r.catalog.casks?.includes(cask))&&(!subtype||r.catalog.subtypes?.includes(subtype))&&(!query||[r.name,r.english,r.catalog.country,r.catalog.region,r.catalog.distillery].join(' ').toLowerCase().includes(query)));all.sort((a,b)=>compareReviews(a,b,sort));state.total=all.length;state.pages=Math.ceil(all.length/24);rows=all.slice((state.page-1)*24,state.page*24);}}catch(error){if(version!==state.request)return;$('#cards').innerHTML=`<div class="empty"><h3>${esc(error.message)}</h3><p>잠시 후 다시 시도해 주세요.</p></div>`;$('#count').textContent='연결 안됨';return;}
   $('#count').textContent=`${state.total}개 제품`;
   $('#page-label').textContent=state.pages?`${state.page} / ${state.pages} 페이지`:'0개 제품';$('#previous-page').disabled=state.page<=1;$('#next-page').disabled=state.page>=state.pages;
-  $('#cards').innerHTML=rows.length?rows.map(r=>{const c=r.catalog;const draft=r.liking_estimates.score?.value;return `<button class="review-card" data-id="${esc(r.id)}" type="button"><div class="card-photo">${photo(r)}<span class="type-badge">${esc(c.primary_type)}</span></div><div class="card-copy"><div class="card-origin">${esc(c.origin||c.country||'원산지 미확인')}</div><h3>${esc(r.name)}</h3><p class="english">${esc(r.english)}</p><div class="card-tags">${(c.casks||[]).slice(0,3).map(badge).join('')}</div><div class="card-bottom"><span>${number(r.abv,'%')} · ${number(r.volume,' ml')}</span><span>${draft==null?'평가 근거 부족':`추정 ★ ${Number(draft).toFixed(1)}`}</span></div></div></button>`;}).join(''):'<div class="empty"><h3>해당하는 리뷰가 없습니다.</h3><p>검색어나 분류를 조금 넓혀 보세요.</p></div>';
+  $('#cards').innerHTML=rows.length?rows.map(r=>{const c=r.catalog;const draft=reviewScore(r);return `<button class="review-card" data-id="${esc(r.id)}" type="button"><div class="card-photo">${photo(r)}<span class="type-badge">${esc(c.primary_type)}</span></div><div class="card-copy"><div class="card-origin">${esc(c.origin||c.country||'원산지 미확인')}</div><h3>${esc(r.name)}</h3><p class="english">${esc(r.english)}</p><div class="card-tags">${(c.casks||[]).slice(0,3).map(badge).join('')}</div><div class="card-bottom"><span>${number(r.abv,'%')} · ${number(r.volume,' ml')}</span><span>${draft==null?'평가 근거 부족':`추정 ★ ${Number(draft).toFixed(1)}`}</span></div></div></button>`;}).join(''):'<div class="empty"><h3>해당하는 리뷰가 없습니다.</h3><p>검색어나 분류를 조금 넓혀 보세요.</p></div>';
   $('#cards').querySelectorAll('[data-id]').forEach(button=>button.addEventListener('click',()=>openDetail(button.dataset.id)));
   $('#cards').querySelectorAll('img').forEach(img=>img.addEventListener('error',()=>{img.outerHTML='<div class="photo-placeholder"><span>▱</span><small>사진을 불러오지 못했습니다</small></div>';},{once:true}));
   hydrateImages($('#cards'));
@@ -85,9 +96,9 @@ async function openDetail(id){
 }
 $('#close-detail').addEventListener('click',()=>{state.detailRequest++;$('#detail').close();});
 $('#detail').addEventListener('click',event=>{if(event.target===$('#detail')){state.detailRequest++;$('#detail').close();}});
-$('#reset').addEventListener('click',()=>{['#search','#type','#cask','#subtype'].forEach(selector=>$(selector).value='');state.page=1;render();});
+$('#reset').addEventListener('click',()=>{['#search','#type','#cask','#subtype'].forEach(selector=>$(selector).value='');$('#sort').value='newest';state.page=1;render();});
 let searchTimer;
-['#search','#type','#cask','#subtype'].forEach(selector=>$(selector).addEventListener(selector==='#search'?'input':'change',()=>{state.page=1;clearTimeout(searchTimer);if(selector==='#search')searchTimer=setTimeout(render,250);else render();}));
+['#search','#type','#cask','#subtype','#sort'].forEach(selector=>$(selector).addEventListener(selector==='#search'?'input':'change',()=>{state.page=1;clearTimeout(searchTimer);if(selector==='#search')searchTimer=setTimeout(render,250);else render();}));
 $('#previous-page').addEventListener('click',()=>{if(state.page>1){state.page--;render();}});
 $('#next-page').addEventListener('click',()=>{if(state.page<state.pages){state.page++;render();}});
 $('#invite-form').addEventListener('submit',event=>{event.preventDefault();if(encryptedConfig)unlockArchive($('#invite-key').value);});
