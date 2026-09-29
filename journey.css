@@ -71,7 +71,8 @@
 .whisky-journey .wj-note{display:grid;grid-template-columns:59px minmax(0,1fr);gap:6px;font-size:14px}
 .whisky-journey .wj-note dt{display:flex;align-items:baseline;gap:5px;color:var(--wj-muted);font-weight:400}
 .whisky-journey .wj-stage-letter{font-size:12px;font-weight:600;color:var(--wj-green);width:11px}
-.whisky-journey .wj-note dd{min-width:0}
+.whisky-journey .wj-note dd{min-width:0;display:flex;flex-wrap:wrap;gap:4px 6px}
+.whisky-journey .wj-note-tag{max-width:100%;border-radius:4px;background:var(--wj-mint);padding:1px 5px;font-size:14px;line-height:1.6}
 .whisky-journey .wj-detail-hint{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--wj-green);margin-top:11px;padding-top:9px;border-top:1px solid var(--wj-line)}
 .whisky-journey .wj-card-details[open] .wj-detail-hint>span{transform:rotate(45deg)}
 .whisky-journey .wj-card-body{border-top:1px solid var(--wj-line);margin-top:10px;padding-top:11px;font-size:14px}
