@@ -178,7 +178,7 @@ function runRecommendation(){
 function recommendFrom(id){
   const record=state.reviews.find(r=>r.id===id);if(!record)return;
   state.detailRequest++;$('#detail').close();$('#rec-category').value=record.category;$('#rec-mode').value='similar';$('#rec-stage').value='all';
-  refreshRecommendationInputs();$('#rec-seed').value=id;showView('recommend');runRecommendation();
+  refreshRecommendationInputs();$('#rec-seed').value=id;$('#classic-recommendation').open=true;showView('recommend');runRecommendation();
 }
 function discoveryClick(event){
   const button=event.target.closest('button');if(!button)return;
@@ -217,6 +217,7 @@ async function startArchive(data){
     $('#rec-category').innerHTML='';fillOptions('#rec-category',state.reviews.filter(r=>!r.is_collection).map(r=>r.category));
     if(state.reviews.some(r=>r.category==='위스키'))$('#rec-category').value='위스키';
     refreshRecommendationInputs();updateCompareControls();
+    WhiskyJourney.reset();WhiskyJourney.mount($('#whisky-journey'),state.reviews,id=>openDetail(id));
   }
   if(state.profileEditsIncluded)$('.method-note').textContent='향미와 전체 강도에는 작성자가 수정한 값이 반영되며, 수정하지 않은 항목은 원문 기반 추정입니다. 향미는 0.5~4.5, 전체 강도는 0~5의 별도 척도입니다. 만족도는 원문 기반 추정이며 개인 별점·메모는 공개하지 않습니다.';
   $('#updated').textContent=`데이터 생성 ${new Date(data.generated_at).toLocaleDateString('ko-KR')}`;await render();trackView('/');
