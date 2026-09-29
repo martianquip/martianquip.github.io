@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
+  <meta name="description" content="MARTIANQUIP · 마시는 큅의 위스키와 음료 리뷰, 향·맛·여운 기록">
+  <title>MARTIANQUIP · Taste Atlas</title>
+  <link rel="stylesheet" href="./public-view.css">
+  <script src="./public-view.js" defer></script>
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="./" aria-label="MARTIANQUIP 홈"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="#243f36"/><path d="M20 15h24l-3 22q-9 13-18 0z" fill="none" stroke="#f5eee0" stroke-width="3"/><path d="M23 30q10 5 18 0l-2 7q-7 8-14 0z" fill="#daaa75"/><path d="M32 43v8m-9 0h18" stroke="#f5eee0" stroke-width="3" stroke-linecap="round"/></svg><span class="brand-copy">MARTIANQUIP<small>TASTE ATLAS</small></span></a><a class="blog-link" href="https://blog.naver.com/martianquip" target="_blank" rel="noopener noreferrer">블로그 ↗</a></header>
+  <section id="access-gate" class="access-gate" hidden aria-labelledby="gate-title"><p class="eyebrow">MARTIANQUIP · INVITE ONLY</p><h1 id="gate-title">초대 링크로 만나는<br>취향의 기록.</h1><p id="gate-message" role="status">전달받은 공유 링크로 접속해 주세요. 링크의 열쇠가 있어야 리뷰와 사진을 열 수 있습니다.</p><form id="invite-form"><label for="invite-key">공유 링크 또는 열쇠<input id="invite-key" type="password" autocomplete="off" spellcheck="false" placeholder="전달받은 링크를 붙여넣어 주세요"></label><button id="unlock" type="submit">리뷰 열기</button></form><small>이 링크를 전달받은 사람은 누구나 열람할 수 있습니다.</small></section>
+  <main id="archive" hidden>
+    <section class="hero"><p class="eyebrow">향과 맛을 따라가는 리뷰 아카이브</p><h1>한 잔에 담긴<br><em>서로 다른 이야기.</em></h1><p>위스키, 에너지드링크, 전통주부터 한 번쯤 궁금했던 음료까지.<br>종류와 캐스크를 고르고, 향·맛·여운을 살펴보세요.</p><div id="summary" class="hero-stat">리뷰를 불러오는 중…</div></section>
+    <section class="visitor-strip" aria-label="방문 통계"><div><span>전체 방문자</span><b id="total-visitors">연결 중</b></div><div><span>오늘 방문자</span><b id="today-visitors">연결 중</b></div><div><span>전체 조회</span><b id="total-views">연결 중</b></div><div><span>오늘 조회</span><b id="today-views">연결 중</b></div><p id="analytics-status">브라우저 쿠키 기준 · 오늘은 한국 시간</p></section>
+    <section class="library" aria-label="리뷰 탐색">
+      <div class="filters"><label class="search-label">제품 검색<input id="search" type="search" placeholder="제품명, 증류소, 국가 검색"></label><label>종류<select id="type"><option value="">모든 종류</option></select></label><label>캐스크<select id="cask"><option value="">모든 캐스크</option></select></label><label>세부 분류<select id="subtype"><option value="">모든 세부 분류</option></select></label><button id="reset" class="quiet-button" type="button">초기화</button></div>
+      <div class="results-line"><h2>리뷰 컬렉션</h2><span id="count" aria-live="polite"></span></div><div id="cards" class="cards"><p>잠시만 기다려 주세요.</p></div><nav class="pagination" aria-label="리뷰 페이지"><button id="previous-page" type="button">← 이전</button><span id="page-label" aria-live="polite"></span><button id="next-page" type="button">다음 →</button></nav>
+    </section>
+    <p class="method-note">향미 점수와 만족도는 원문 표현을 바탕으로 추정한 초안입니다. 향미는 0.5~4.5, 전체 강도는 0~5의 별도 척도이며, 근거가 부족한 항목은 비워 두었습니다.</p>
+  </main>
+  <footer><span>MARTIANQUIP · 마시는 큅</span><span id="updated"></span></footer>
+  <dialog id="detail"><button type="button" id="close-detail" class="close-button" aria-label="상세 닫기">×</button><div id="detail-content"></div></dialog>
+</body>
+</html>
