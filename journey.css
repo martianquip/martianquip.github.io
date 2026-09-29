@@ -1,103 +1,110 @@
 /* Scoped so the journey can share both the owner app and published archive. */
-.whisky-journey{--wj-ink:#253e35;--wj-muted:#657669;--wj-green:#285d48;--wj-mint:#edf3ed;--wj-paper:#fbfaf6;--wj-line:#dce4d9;--wj-amber:#926631;color:var(--wj-ink);font-size:14px;line-height:1.7;min-width:0;padding:8px 0 35px}
+.whisky-journey{--wj-ink:#253e35;--wj-muted:#657669;--wj-green:#285d48;--wj-mint:#edf3ed;--wj-paper:#fbfaf6;--wj-line:#dce4d9;--wj-amber:#926631;color:var(--wj-ink);font-size:14px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere;min-width:0;padding:8px 0 35px}
 .whisky-journey *{box-sizing:border-box}
+.whisky-journey small{font-size:inherit}
+.whisky-journey .wj-sentence{display:inline}
+.whisky-journey p{text-wrap:pretty}
 .whisky-journey h2,.whisky-journey h3,.whisky-journey h4,.whisky-journey p{margin:0}
 .whisky-journey button,.whisky-journey input,.whisky-journey select{font:inherit;color:inherit}
 .whisky-journey button,.whisky-journey summary{cursor:pointer}
 .whisky-journey button,.whisky-journey input,.whisky-journey select,.whisky-journey a,.whisky-journey summary{outline-offset:4px}
 .whisky-journey :focus-visible{outline:2px solid var(--wj-green)}
 .whisky-journey a{color:var(--wj-green);text-underline-offset:3px}
-.whisky-journey .wj-kicker{font-size:10px;font-weight:600;letter-spacing:1.4px;color:var(--wj-amber);margin-bottom:12px}
+.whisky-journey .wj-kicker{font-size:12px;font-weight:600;letter-spacing:1.4px;color:var(--wj-amber);margin-bottom:12px}
 .whisky-journey .wj-heading{margin:0 0 32px}
 .whisky-journey .wj-heading h2{font-family:'Noto Serif KR',serif;font-size:35px;line-height:1.5;font-weight:500;letter-spacing:-1.4px;margin-bottom:14px}
-.whisky-journey .wj-heading>p:last-child{font-size:13px;color:var(--wj-muted);line-height:1.9}
+.whisky-journey .wj-heading>p:last-child{font-size:14px;color:var(--wj-muted);line-height:1.9}
 .whisky-journey .wj-form{border:1px solid var(--wj-line);border-radius:14px;background:#fff;overflow:hidden}
 .whisky-journey .wj-experience,.whisky-journey .wj-budget-section{padding:27px 29px}
-.whisky-journey .wj-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px}
+.whisky-journey .wj-section-title{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px}
 .whisky-journey .wj-section-title h3{font-size:17px;font-weight:600;line-height:1.6}
-.whisky-journey .wj-section-title h3>span{color:var(--wj-amber);font-size:11px;margin-right:10px}
-.whisky-journey .wj-section-title h3>small{font-size:10px;color:var(--wj-muted);font-weight:400;margin-left:7px;white-space:nowrap}
-.whisky-journey .wj-clear,.whisky-journey .wj-remove{border:0;background:transparent;color:var(--wj-muted);font-size:11px;min-height:40px;padding:7px 5px;white-space:nowrap}
+.whisky-journey .wj-section-title h3>span{color:var(--wj-amber);font-size:12px;margin-right:10px}
+.whisky-journey .wj-section-title h3>small{font-size:14px;color:var(--wj-muted);font-weight:400;margin-left:7px;display:inline-block}
+.whisky-journey .wj-clear,.whisky-journey .wj-remove{border:0;background:transparent;color:var(--wj-muted);font-size:14px;min-height:40px;padding:7px 5px;white-space:nowrap}
 .whisky-journey .wj-clear:hover,.whisky-journey .wj-remove:hover{text-decoration:underline;text-underline-offset:3px}
-.whisky-journey .wj-help{font-size:11px;color:var(--wj-muted);line-height:1.9}
+.whisky-journey .wj-help{font-size:14px;color:var(--wj-muted);line-height:1.9}
 .whisky-journey .wj-filters,.whisky-journey .wj-budgets{display:grid;grid-template-columns:1.5fr 1fr;gap:15px;margin:22px 0 10px}
-.whisky-journey .wj-filters label,.whisky-journey .wj-budgets label{display:flex;flex-direction:column;gap:7px;font-size:11px;font-weight:500;min-width:0}
-.whisky-journey .wj-filters input,.whisky-journey .wj-filters select,.whisky-journey .wj-budgets input{width:100%;min-width:0;border:1px solid var(--wj-line);border-radius:6px;background:#fff;padding:10px 12px;height:44px;font-size:12px}
+.whisky-journey .wj-filters label,.whisky-journey .wj-budgets label{display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:500;min-width:0}
+.whisky-journey .wj-filters input,.whisky-journey .wj-filters select,.whisky-journey .wj-budgets input{width:100%;min-width:0;border:1px solid var(--wj-line);border-radius:6px;background:#fff;padding:10px 12px;height:44px;font-size:14px}
 .whisky-journey .wj-list-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:21px 0 10px}
-.whisky-journey .wj-list-heading h4{font-size:12px;font-weight:600}
-.whisky-journey .wj-list-heading>span{font-size:11px;color:var(--wj-muted);font-variant-numeric:tabular-nums}
+.whisky-journey .wj-list-heading h4{font-size:14px;font-weight:600}
+.whisky-journey .wj-list-heading>span{font-size:14px;color:var(--wj-muted);font-variant-numeric:tabular-nums}
 .whisky-journey .wj-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:290px;overflow-y:auto;overscroll-behavior:contain;padding:4px 5px 4px 2px;scrollbar-color:#b8c8b9 transparent}
 .whisky-journey .wj-choice{display:flex;align-items:center;gap:10px;border:1px solid var(--wj-line);border-radius:7px;padding:12px;min-width:0;cursor:pointer;background:#fff}
 .whisky-journey .wj-choice:hover{border-color:#8ba590;background:var(--wj-paper)}
 .whisky-journey .wj-choice.is-selected{background:var(--wj-mint);border-color:#91ad98}
 .whisky-journey .wj-choice input{width:17px;height:17px;accent-color:var(--wj-green);flex:none;margin:0}
 .whisky-journey .wj-choice>span:not(.wj-check){min-width:0;flex:1}
-.whisky-journey .wj-choice strong{font-size:12px;font-weight:600;display:block;overflow-wrap:anywhere;line-height:1.6}
-.whisky-journey .wj-choice small{display:block;font-size:10px;color:var(--wj-muted);line-height:1.7;overflow-wrap:anywhere}
-.whisky-journey .wj-check{font-size:9px;color:var(--wj-green);flex:none}
+.whisky-journey .wj-choice strong{font-size:14px;font-weight:600;display:block;overflow-wrap:anywhere;line-height:1.6}
+.whisky-journey .wj-choice small{display:block;font-size:14px;color:var(--wj-muted);line-height:1.7;overflow-wrap:anywhere}
+.whisky-journey .wj-choice small.wj-english{margin-top:0}
+.whisky-journey .wj-check{font-size:14px;color:var(--wj-green);flex:none}
 .whisky-journey .wj-choice:has(input:disabled){opacity:.55;cursor:default}
-.whisky-journey .wj-empty{font-size:12px;color:var(--wj-muted);padding:18px;background:var(--wj-paper);border-radius:6px;grid-column:1/-1}
+.whisky-journey .wj-empty{font-size:14px;color:var(--wj-muted);padding:18px;background:var(--wj-paper);border-radius:6px;grid-column:1/-1}
 .whisky-journey .wj-reference-section{margin:20px 0 24px;border:1px solid var(--wj-line);border-radius:9px;padding:15px 17px;background:var(--wj-paper)}
-.whisky-journey .wj-reference-section>summary{font-size:12px;font-weight:600;line-height:1.8}
-.whisky-journey .wj-reference-section>summary small{font-weight:400;font-size:10px;color:var(--wj-amber);margin-left:8px;display:inline-block}
+.whisky-journey .wj-reference-section>summary{font-size:14px;font-weight:600;line-height:1.8}
+.whisky-journey .wj-reference-section>summary small{font-weight:400;font-size:14px;color:var(--wj-amber);margin-left:8px;display:inline-block}
 .whisky-journey .wj-reference-section>.wj-help{margin:12px 0}
-.whisky-journey .wj-references .wj-source{font-size:9px;color:var(--wj-muted);padding:5px 3px 12px}
+.whisky-journey .wj-references .wj-source{font-size:14px;color:var(--wj-muted);padding:5px 3px 12px}
 .whisky-journey .wj-references{display:block}
 .whisky-journey .wj-selected{margin-bottom:11px}
 .whisky-journey .wj-selected-row{display:flex;align-items:center;gap:13px;min-width:0;border-bottom:1px solid var(--wj-line);padding:12px 0}
 .whisky-journey .wj-selected-row>div{flex:1;min-width:0}
-.whisky-journey .wj-selected-row strong{font-size:12px;font-weight:500;display:block;overflow-wrap:anywhere}
-.whisky-journey .wj-selected-row small{font-size:10px;color:var(--wj-muted);display:block}
-.whisky-journey .wj-selected-row select{border:1px solid var(--wj-line);border-radius:6px;background:white;font-size:11px;padding:8px;min-height:40px;max-width:120px}
+.whisky-journey .wj-selected-row strong{font-size:14px;font-weight:500;display:block;overflow-wrap:anywhere}
+.whisky-journey .wj-selected-row small{font-size:14px;color:var(--wj-muted);display:block}
+.whisky-journey .wj-selected-row select{border:1px solid var(--wj-line);border-radius:6px;background:white;font-size:14px;padding:8px;min-height:40px;max-width:120px}
 .whisky-journey .wj-budget-section{background:var(--wj-mint);border-top:1px solid var(--wj-line)}
 .whisky-journey .wj-budgets{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:19px}
-.whisky-journey .wj-build{display:flex;align-items:center;justify-content:space-between;gap:25px;min-height:47px;background:var(--wj-green);color:white;border:0;border-radius:7px;padding:12px 19px;margin-top:23px;font-size:13px;font-weight:500}
+.whisky-journey .wj-build{display:flex;align-items:center;justify-content:space-between;gap:25px;min-height:47px;background:var(--wj-green);color:white;border:0;border-radius:7px;padding:12px 19px;margin-top:23px;font-size:14px;font-weight:500}
 .whisky-journey .wj-build:hover{background:#1d4b39}
 .whisky-journey .wj-build span{font-size:18px;font-weight:400}
-.whisky-journey .wj-privacy{font-size:10px;color:var(--wj-muted);margin-top:12px;line-height:1.9}
-.whisky-journey .wj-status{font-size:12px;color:var(--wj-green);min-height:25px;margin:14px 0}
+.whisky-journey .wj-privacy{font-size:14px;color:var(--wj-muted);margin-top:12px;line-height:1.9}
+.whisky-journey .wj-status{font-size:14px;color:var(--wj-green);min-height:25px;margin:14px 0}
 .whisky-journey .wj-results{min-width:0;scroll-margin-top:22px}
 .whisky-journey .wj-results:focus{outline:none}
 .whisky-journey .wj-results:focus-visible{outline:2px solid var(--wj-green);outline-offset:7px;border-radius:5px}
-.whisky-journey .wj-result-hint{border:1px dashed #b8c8b8;padding:28px 22px;border-radius:10px;font-size:12px;color:var(--wj-muted);text-align:center}
+.whisky-journey .wj-result-hint{border:1px dashed #b8c8b8;padding:28px 22px;border-radius:10px;font-size:14px;color:var(--wj-muted);text-align:center}
 .whisky-journey .wj-result-heading{margin:20px 0 26px}
 .whisky-journey .wj-result-heading h3{font-family:'Noto Serif KR',serif;font-weight:500;font-size:27px;line-height:1.5;letter-spacing:-.9px;margin-bottom:13px}
-.whisky-journey .wj-result-heading>p:not(.wj-kicker){font-size:11px;color:var(--wj-muted);margin-top:6px;line-height:1.9}
+.whisky-journey .wj-result-heading>p:not(.wj-kicker){font-size:14px;color:var(--wj-muted);margin-top:6px;line-height:1.9}
 .whisky-journey .wj-tree{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start}
 .whisky-journey .wj-branch{min-width:0}
 .whisky-journey .wj-branch>h3{border-top:3px solid var(--wj-green);padding:13px 2px;margin-bottom:9px;font-size:18px;font-weight:500}
 .whisky-journey .wj-branch:nth-child(2)>h3{border-color:#ac8756}
 .whisky-journey .wj-branch:nth-child(3)>h3{border-color:#71857a}
 .whisky-journey .wj-node{background:#fff;border:1px solid var(--wj-line);border-radius:10px;padding:18px;min-width:0;overflow-wrap:anywhere}
-.whisky-journey .wj-node-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--wj-muted);font-size:9px;margin-bottom:12px}
-.whisky-journey .wj-step{font-size:9px;letter-spacing:.8px;color:var(--wj-green);background:var(--wj-mint);border-radius:4px;padding:3px 7px}
+.whisky-journey .wj-node-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--wj-muted);font-size:14px;margin-bottom:12px}
+.whisky-journey .wj-step{font-size:12px;letter-spacing:.8px;color:var(--wj-green);background:var(--wj-mint);border-radius:4px;padding:3px 7px}
 .whisky-journey .wj-node h4{font-size:15px;font-weight:600;line-height:1.7;letter-spacing:-.3px}
-.whisky-journey .wj-english{color:var(--wj-muted);font-size:10px;line-height:1.7;margin-top:3px}
-.whisky-journey .wj-spec{color:var(--wj-muted);font-size:10px;margin:11px 0 4px}
-.whisky-journey .wj-price{font-size:10px;color:var(--wj-amber)}
-.whisky-journey .wj-shared{font-size:11px;line-height:1.8;margin:15px 0 8px}
-.whisky-journey .wj-node-reason{font-size:10px;color:var(--wj-muted);line-height:1.8;margin-bottom:11px}
-.whisky-journey .wj-cost{padding-top:12px;border-top:1px solid var(--wj-line);font-size:11px;font-weight:500;margin-top:13px}
-.whisky-journey .wj-cost small{font-size:9px;color:var(--wj-muted);font-weight:400;display:block;line-height:1.8;margin-top:4px}
-.whisky-journey .wj-review{border:1px solid var(--wj-line);border-radius:5px;background:var(--wj-paper);color:var(--wj-green);font-size:10px;min-height:38px;padding:7px 10px;margin-top:13px;text-align:left}
+.whisky-journey .wj-english{color:var(--wj-muted);font-size:14px;line-height:1.7;margin-top:3px}
+.whisky-journey .wj-english[lang="en"]{font-size:12px}
+.whisky-journey .wj-spec{color:var(--wj-muted);font-size:14px;margin:11px 0 4px}
+.whisky-journey .wj-price{font-size:14px;color:var(--wj-amber)}
+.whisky-journey .wj-shared{font-size:14px;line-height:1.8;margin:15px 0 8px}
+.whisky-journey .wj-node-reason{font-size:14px;color:var(--wj-muted);line-height:1.8;margin-bottom:11px}
+.whisky-journey .wj-cost{padding-top:12px;border-top:1px solid var(--wj-line);font-size:14px;font-weight:500;margin-top:13px}
+.whisky-journey .wj-cost small{font-size:14px;color:var(--wj-muted);font-weight:400;display:block;line-height:1.8;margin-top:4px}
+.whisky-journey .wj-review{border:1px solid var(--wj-line);border-radius:5px;background:var(--wj-paper);color:var(--wj-green);font-size:14px;min-height:38px;padding:7px 10px;margin-top:13px;text-align:left}
 .whisky-journey .wj-review:hover{background:var(--wj-mint)}
 .whisky-journey .wj-next{border-top:1px solid var(--wj-line);margin-top:18px;padding-top:14px}
-.whisky-journey .wj-next>summary{font-size:11px;line-height:1.8;color:var(--wj-green)}
-.whisky-journey .wj-next>summary>span{display:block;font-size:9px;color:var(--wj-muted);padding-left:15px}
+.whisky-journey .wj-next>summary{font-size:14px;line-height:1.8;color:var(--wj-green)}
+.whisky-journey .wj-next>summary>span{display:block;font-size:14px;color:var(--wj-muted);padding-left:15px}
 .whisky-journey .wj-children{list-style:none;padding:0 0 0 10px;margin:15px 0 0 2px;border-left:1px solid #bdcdbc}
 .whisky-journey .wj-children>li{position:relative;margin:0 0 12px;min-width:0}
 .whisky-journey .wj-children>li:last-child{margin-bottom:0}
 .whisky-journey .wj-children>li:before{content:'';position:absolute;width:10px;height:1px;background:#bdcdbc;left:-10px;top:21px}
 .whisky-journey .wj-children .wj-node{padding:12px;background:var(--wj-paper)}
-.whisky-journey .wj-children .wj-node h4{font-size:13px}
+.whisky-journey .wj-children .wj-node h4{font-size:14px}
 .whisky-journey .wj-children .wj-children{padding-left:8px;margin-left:0}
 .whisky-journey .wj-children .wj-children>li:before{width:8px;left:-8px}
-.whisky-journey .wj-route-end{font-size:9px;color:var(--wj-muted);border-top:1px solid var(--wj-line);padding-top:12px;margin-top:16px;line-height:1.8}
-.whisky-journey .wj-branch-empty{padding:24px 18px;border:1px dashed var(--wj-line);border-radius:10px;background:var(--wj-mint);font-size:11px;line-height:1.9;color:var(--wj-muted)}
+.whisky-journey .wj-route-end{font-size:14px;color:var(--wj-muted);border-top:1px solid var(--wj-line);padding-top:12px;margin-top:16px;line-height:1.8}
+.whisky-journey .wj-branch-empty{padding:24px 18px;border:1px dashed var(--wj-line);border-radius:10px;background:var(--wj-mint);font-size:14px;line-height:1.9;color:var(--wj-muted)}
 .whisky-journey .wj-method{margin-top:29px;border-top:1px solid var(--wj-line);padding-top:20px;color:var(--wj-muted)}
-.whisky-journey .wj-method h3{font-size:11px;font-weight:600;margin-bottom:8px}
-.whisky-journey .wj-method p{font-size:10px;line-height:1.9;margin-top:6px}
+.whisky-journey .wj-method h3{font-size:14px;font-weight:600;margin-bottom:8px}
+.whisky-journey .wj-method p{font-size:14px;line-height:1.9;margin-top:6px}
 .whisky-journey .wj-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:1000px){.whisky-journey .wj-tree{gap:12px}.whisky-journey .wj-node{padding:14px}.whisky-journey .wj-children .wj-node{padding:10px}}
 @media(max-width:800px){.whisky-journey .wj-tree{grid-template-columns:1fr;gap:24px}.whisky-journey .wj-node{padding:20px}.whisky-journey .wj-children .wj-node{padding:17px}.whisky-journey .wj-children{padding-left:17px}.whisky-journey .wj-children>li:before{width:17px;left:-17px}.whisky-journey .wj-heading h2{font-size:29px}.whisky-journey .wj-experience,.whisky-journey .wj-budget-section{padding:22px}}
-@media(max-width:540px){.whisky-journey .wj-heading h2{font-size:25px}.whisky-journey .wj-heading>p:last-child{font-size:12px}.whisky-journey .wj-heading{margin-bottom:25px}.whisky-journey .wj-experience,.whisky-journey .wj-budget-section{padding:18px 15px}.whisky-journey .wj-section-title h3{font-size:15px}.whisky-journey .wj-section-title h3>span{margin-right:7px}.whisky-journey .wj-catalog,.whisky-journey .wj-filters,.whisky-journey .wj-budgets{grid-template-columns:1fr}.whisky-journey .wj-catalog{max-height:310px}.whisky-journey .wj-filters,.whisky-journey .wj-budgets{gap:12px;margin-top:16px}.whisky-journey .wj-reference-section{padding:13px 11px}.whisky-journey .wj-reference-section>summary small{display:block;margin:5px 0 0 14px}.whisky-journey .wj-selected-row{gap:7px;flex-wrap:wrap}.whisky-journey .wj-selected-row>div{flex-basis:100%}.whisky-journey .wj-selected-row>label{flex:1}.whisky-journey .wj-selected-row select{max-width:none;width:100%}.whisky-journey .wj-remove{padding-left:11px}.whisky-journey .wj-build{width:100%;font-size:12px;padding:11px 15px}.whisky-journey .wj-result-heading h3{font-size:24px}.whisky-journey .wj-node{padding:17px}.whisky-journey .wj-children .wj-node{padding:13px}.whisky-journey .wj-children{padding-left:10px}.whisky-journey .wj-children>li:before{width:10px;left:-10px}.whisky-journey .wj-choice{padding:10px}.whisky-journey .wj-check{display:none}.whisky-journey .wj-result-hint{padding:22px 16px}}
+@media(max-width:540px){.whisky-journey .wj-heading h2{font-size:25px}.whisky-journey .wj-heading>p:last-child{font-size:14px}.whisky-journey .wj-heading{margin-bottom:25px}.whisky-journey .wj-experience,.whisky-journey .wj-budget-section{padding:18px 15px}.whisky-journey .wj-section-title h3{font-size:15px}.whisky-journey .wj-section-title h3>span{margin-right:7px}.whisky-journey .wj-catalog,.whisky-journey .wj-filters,.whisky-journey .wj-budgets{grid-template-columns:1fr}.whisky-journey .wj-catalog{max-height:310px}.whisky-journey .wj-filters,.whisky-journey .wj-budgets{gap:12px;margin-top:16px}.whisky-journey .wj-reference-section{padding:13px 11px}.whisky-journey .wj-reference-section>summary small{display:block;margin:5px 0 0 14px}.whisky-journey .wj-selected-row{gap:7px;flex-wrap:wrap}.whisky-journey .wj-selected-row>div{flex-basis:100%}.whisky-journey .wj-selected-row>label{flex:1}.whisky-journey .wj-selected-row select{max-width:none;width:100%}.whisky-journey .wj-remove{padding-left:11px}.whisky-journey .wj-build{width:100%;font-size:14px;padding:11px 15px}.whisky-journey .wj-result-heading h3{font-size:24px}.whisky-journey .wj-node{padding:17px}.whisky-journey .wj-children .wj-node{padding:13px}.whisky-journey .wj-children{padding-left:10px}.whisky-journey .wj-children>li:before{width:10px;left:-10px}.whisky-journey .wj-choice{padding:10px}.whisky-journey .wj-check{display:none}.whisky-journey .wj-result-hint{padding:22px 16px}}
+
+@media(max-width:540px){.whisky-journey .wj-sentence{display:block}.whisky-journey .wj-sentence+.wj-sentence{margin-top:.3em}.whisky-journey .wj-filters input,.whisky-journey .wj-filters select,.whisky-journey .wj-budgets input,.whisky-journey .wj-selected-row select{font-size:16px}.whisky-journey .wj-build{gap:12px}.whisky-journey .wj-node-top{gap:6px}}
