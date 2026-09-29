@@ -52,6 +52,7 @@ const labels={nose:'향',palate:'맛',finish:'여운'};
 const badge=text=>`<span class="badge">${esc(text)}</span>`;
 function safeImage(url){try{const parsed=new URL(url,location.href);return url&&((parsed.origin===location.origin&&url.startsWith('./assets/'))||parsed.protocol==='https:')?url:'';}catch{return '';}}
 function photo(record,large=false){const attrs=imageAttributes(record.catalog.photo_url);return attrs?`<img class="product-photo${large?' large':''}" ${attrs} alt="${esc(record.name)} 제품 사진" loading="lazy" referrerpolicy="no-referrer">`:`<div class="photo-placeholder${large?' large':''}" aria-label="제품 사진 미확인"><span>▱</span><small>사진 미확인</small></div>`;}
+$('#whisky-journey').addEventListener('error',event=>{if(event.target.matches?.('.wj-photo img'))event.target.outerHTML='<span class="photo-placeholder">사진 미확인</span>';},true);
 function fillOptions(selector,values){const select=$(selector);[...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko')).forEach(value=>select.add(new Option(value,value)));}
 function reviewScore(record){const value=record.liking_estimates?.score?.value;return Number.isFinite(value)?value:null;}
 function compareReviews(a,b,sort){
@@ -220,7 +221,7 @@ async function startArchive(data){
     $('#rec-category').innerHTML='';fillOptions('#rec-category',state.reviews.filter(r=>!r.is_collection).map(r=>r.category));
     if(state.reviews.some(r=>r.category==='위스키'))$('#rec-category').value='위스키';
     refreshRecommendationInputs();updateCompareControls();
-    WhiskyJourney.reset();WhiskyJourney.mount($('#whisky-journey'),state.reviews,id=>openDetail(id));
+    WhiskyJourney.reset();WhiskyJourney.mount($('#whisky-journey'),state.reviews,id=>openDetail(id),{photo,hydrateImages});
   }
   if(state.profileEditsIncluded)$('.method-note').innerHTML=sentenceText('향미와 전체 강도에는 작성자가 수정한 값이 반영되며, 수정하지 않은 항목은 원문 기반 추정입니다. 향미는 0.5~4.5, 전체 강도는 0~5의 별도 척도입니다. 만족도는 원문 기반 추정이며 개인 별점·메모는 공개하지 않습니다.');
   $('#updated').textContent=`데이터 생성 ${new Date(data.generated_at).toLocaleDateString('ko-KR')}`;await render();trackView('/');
