@@ -217,7 +217,7 @@ const WhiskyTree = (() => {
     if (!root?.isConnected) return;
     const el = root.querySelector('[data-save-status]');
     if (!el) return;
-    el.textContent = error || (saving ? '저장 중…' : changed !== saved ? '저장 대기…' : '이 탭에 임시 저장됨');
+    el.textContent = error || (saving ? '저장 중…' : changed !== saved ? '저장 대기…' : '이 브라우저에 저장됨');
     el.classList.toggle('wt-error', !!error);
     root.querySelector('[data-wt="retry"]').hidden = !error;
     root.querySelector('[data-wt="reload"]').hidden = !error;

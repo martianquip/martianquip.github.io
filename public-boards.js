@@ -35,7 +35,9 @@ async function api(path,options={}){
  if(options.method==='POST'){
   const next=JSON.parse(options.body);
   if(next.revision!==current.revision)throw Error('보드 버전이 변경되었습니다. 다시 불러오세요.');
-  current.document=structuredClone(next.document);current.revision++;
+  const updated={...current,document:structuredClone(next.document),revision:current.revision+1};
+  if(archiveKey)await BrowserWorkspace.saveBoard(path,updated);
+  current.document=updated.document;current.revision=updated.revision;
  }
  return structuredClone(current);
 }

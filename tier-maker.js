@@ -24,7 +24,7 @@ const TierMaker=(()=>{
  }
  function status(){
   const el=root?.querySelector('[data-tier-status]');if(!el)return;
-  el.textContent=error|| (saving?'저장 중…':changed!==saved?'저장 대기 중…':'이 탭에 임시 저장됨');
+  el.textContent=error|| (saving?'저장 중…':changed!==saved?'저장 대기 중…':'이 브라우저에 저장됨');
   el.classList.toggle('tier-error',!!error);
   const retry=root.querySelector('[data-tier-action="save"]');if(retry)retry.disabled=saving||changed===saved;
  }

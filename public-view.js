@@ -4,7 +4,7 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;
 const sentenceText=value=>String(value??'').trim().split(/(?<=[.!?])\s+/).filter(Boolean).map(text=>`<span class="sentence">${esc(text)}</span>`).join(' ');
 const number=(value,suffix='')=>value===null||value===undefined||value===''?'미확인':Number(value).toLocaleString('ko-KR')+suffix;
 const state={reviews:[],mode:'server',profileEditsIncluded:false,encryptedAssets:{},page:1,pages:0,total:0,request:0,detailRequest:0,view:'library',compare:[]};
-let encryptedConfig=null,archiveKey=null,unlockBusy=false;
+let encryptedConfig=null,archiveKey=null,archiveScope='',unlockBusy=false;
 const imageCache=new Map();
 async function decryptFile(url){
   if(!archiveKey||!/^\.\/(data|assets)\/[a-f0-9]{32}\.bin$/.test(url))throw new Error('Invalid encrypted asset');
@@ -35,7 +35,8 @@ async function unlockArchive(value){
     let key=value.trim();if(!/^[A-Za-z0-9_-]{43}$/.test(key))key=new URLSearchParams(new URL(key).hash.slice(1)).get('key')||'';
     if(!/^[A-Za-z0-9_-]{43}$/.test(key))throw new Error('Invalid invite');
     const raw=Uint8Array.from(atob(key.replace(/-/g,'+').replace(/_/g,'/')+'='),c=>c.charCodeAt(0));
-    archiveKey=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);
+    archiveKey=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt','encrypt']);
+    archiveScope=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',raw)),b=>b.toString(16).padStart(2,'0')).join('');
     const data=JSON.parse(new TextDecoder().decode(await decryptFile(encryptedConfig.catalog_url)));
     if(!Array.isArray(data.reviews)||!data.encrypted_assets)throw new Error('Invalid catalog');
     state.encryptedAssets=data.encrypted_assets;
@@ -54,7 +55,7 @@ function safeImage(url){if(typeof BoardImages!=='undefined'&&BoardImages.has(url
 function photo(record,large=false){const attrs=imageAttributes(record.catalog.photo_url);return attrs?`<img class="product-photo${large?' large':''}" ${attrs} alt="${esc(record.name)} 제품 사진" loading="lazy" referrerpolicy="no-referrer">`:`<div class="photo-placeholder${large?' large':''}" aria-label="제품 사진 미확인"><span>▱</span><small>사진 미확인</small></div>`;}
 $('#whisky-journey').addEventListener('error',event=>{if(event.target.matches?.('.wj-photo img'))event.target.outerHTML='<span class="photo-placeholder">사진 미확인</span>';},true);
 function fillOptions(selector,values){const select=$(selector);[...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ko')).forEach(value=>select.add(new Option(value,value)));}
-function reviewScore(record){const value=record.liking_estimates?.score?.value;return Number.isFinite(value)?value:null;}
+function reviewScore(record){const value=record.rating?.score??record.liking_estimates?.score?.value;return Number.isFinite(value)?value:null;}
 function compareReviews(a,b,sort){
   if(sort==='price_asc'||sort==='price_desc')return Discovery.comparePurchasePrice(a,b,sort);
   if(sort==='rating_desc'||sort==='rating_asc'){
@@ -73,7 +74,7 @@ function trackView(page){if(state.mode!=='server'){showCounters(null);return Pro
 async function render(){
   const version=++state.request;
   const query=$('#search').value.trim().toLowerCase(),type=$('#type').value,cask=$('#cask').value,subtype=$('#subtype').value,sort=$('#sort').value;
-  $('#sort-note').textContent=sort.startsWith('price_')?'가격 정렬 기준: 리뷰 당시 구매가격 · 미확인 제품은 마지막':'별점 정렬 기준: 추정 종합 별점 · 미평가 제품은 마지막';
+  $('#sort-note').textContent=sort.startsWith('price_')?'가격 정렬 기준: 구매가격 · 미확인 제품은 마지막':'별점 정렬 기준: 내 별점 우선, 없으면 추정 종합 별점 · 미평가는 마지막';
   let rows;
   try{if(state.mode==='server'){const params=new URLSearchParams({page:String(state.page),limit:'24',q:query,type,cask,subtype,sort});const data=await requestJson('./api/public/catalog?'+params);if(version!==state.request)return;rows=data.reviews;state.total=data.total;state.pages=data.pages;}else{const all=state.reviews.filter(r=>!r.is_collection&&(!type||r.catalog.primary_type===type)&&(!cask||r.catalog.casks?.includes(cask))&&(!subtype||r.catalog.subtypes?.includes(subtype))&&(!query||[r.name,r.english,r.catalog.country,r.catalog.region,r.catalog.distillery].join(' ').toLowerCase().includes(query)));all.sort((a,b)=>compareReviews(a,b,sort));state.total=all.length;state.pages=Math.ceil(all.length/24);rows=all.slice((state.page-1)*24,state.page*24);}}catch(error){if(version!==state.request)return;$('#cards').innerHTML=`<div class="empty"><h3>${esc(error.message)}</h3><p>잠시 후 다시 시도해 주세요.</p></div>`;$('#count').textContent='연결 안됨';return;}
   $('#count').textContent=`${state.total}개 제품`;
@@ -96,6 +97,8 @@ async function openDetail(id){
   $('#detail-content').innerHTML=`<div class="detail-top"><div><h2>${esc(record.name)}</h2><p class="english">${esc(record.english)}</p><p class="review-date">${esc(record.published||'')}의 리뷰</p>${record.source_url?`<a class="source-link" href="${esc(record.source_url)}" target="_blank" rel="noopener noreferrer">블로그 원문 ↗</a>`:''}</div></div><div class="review-overview"><div class="catalog-photo">${photo(record,true)}</div>${ReviewPresentation.facts(record)}</div>${ReviewPresentation.production(record)}${ReviewPresentation.npf(record)}<section class="review-panel review-wheel-section"><div class="review-section-title"><h3>향미 지도</h3><select data-wheel-stage="${esc(record.id)}" aria-label="향미 지도 단계"><option value="all">전체</option><option value="nose">향</option><option value="palate">맛</option><option value="finish">여운</option></select></div><div id="public-wheel">${ReviewPresentation.hex(record)}</div></section>`;
   $('#detail-content [data-wheel-stage]').addEventListener('change',event=>{$('#public-wheel').innerHTML=ReviewPresentation.hex(record,event.target.value);});
   if(state.mode==='static')$('#detail-content .detail-top').insertAdjacentHTML('afterend',`<div class="detail-actions">${compareButton(record)}<button type="button" class="action-button primary" data-recommend="${esc(id)}">이 제품과 비슷한 한 잔</button></div>`);
+  if(c.photos?.length)$('#detail-content').insertAdjacentHTML('beforeend',`<div class="workspace-gallery">${c.photos.map(p=>`<figure><img ${imageAttributes(p.url)} alt="${esc(p.label)}" loading="lazy"><figcaption>${esc(p.label)}</figcaption></figure>`).join('')}</div>`);
+  $('#detail-content').insertAdjacentHTML('beforeend',BrowserWorkspace.editor(record));
   hydrateImages($('#detail-content'));if(!$('#detail').open)$('#detail').showModal();$('#detail').scrollTop=0;trackView('/review/'+id);
 }
 function compareButton(record){
@@ -103,11 +106,13 @@ function compareButton(record){
   return `<button type="button" class="action-button" data-compare="${esc(record.id)}" aria-pressed="${selected}" aria-label="${esc(record.name)} ${selected?'비교에서 제외':'비교에 담기'}">${selected?'✓ 비교에 담음':'＋ 비교에 담기'}</button>`;
 }
 function showView(view){
-  if(state.mode!=='static'||!['library','recommend','compare','whisky-tree','tier-maker'].includes(view))return;
+  if(state.mode!=='static'||!['library','recommend','compare','whisky-tree','tier-maker','map','workspace'].includes(view))return;
   state.view=view;$('#discovery-status').textContent='';
   document.querySelectorAll('[data-view-panel]').forEach(panel=>panel.hidden=panel.dataset.viewPanel!==view);
   document.querySelectorAll('#discovery-nav [data-view]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.view===view)));
   if(view==='compare')renderComparison();
+  if(view==='workspace')BrowserWorkspace.renderData();
+  if(view==='map')BrowserWorkspace.showMap();
   if(view==='whisky-tree'||view==='tier-maker')mountSharedBoard(view).catch(err=>toast(err.message));
   updateCompareControls();
   const heading=$('#'+view+'-view');heading.focus({preventScroll:true});
@@ -150,7 +155,7 @@ function renderComparison(){
   $('#comparison-content').innerHTML=`<p class="comparison-note">${stage==='all'?'전체 프로파일은 기록된 향·맛·여운 값의 평균입니다.':'선택한 단계의 향미를 비교합니다.'} 같은 향미를 같은 줄에 표시합니다. —는 미확인이며 0점이 아닙니다.${mixed?' 서로 다른 음료 종류가 함께 선택되어 있으므로 향미 표현을 참고해 비교해 주세요.':''}</p><div class="comparison-grid" style="--compare-columns:${rows.length}" role="region" aria-label="선택한 제품 비교표" tabindex="0">${rows.map((record,index)=>{
     const c=record.catalog,p=profiles[index],score=reviewScore(record);
     const meta=[['종류',[c.primary_type,...(c.subtypes||[])].filter(Boolean).join(' · ')],['캐스크',(c.casks||[]).join(' · ')],['구매가격',number(record.price,'원')],['잔당가격',`${number(c.serving_price,'원')} / ${number(c.serving_ml,' ml')}${c.serving_price_method==='derived'?' · 계산값':''}`],['용량',number(record.volume,' ml')],['도수',number(record.abv,'%')],['숙성년수',c.age],['국가 / 지역',[c.country,c.region].filter(Boolean).join(' / ')],['증류소',c.distillery],['시음 형태',c.sample_type],['카페인',number(record.caffeine,' mg')],['열량',number(record.calories,' kcal')]];
-    return `<article class="comparison-card"><div class="comparison-photo">${photo(record)}</div><button class="action-button" type="button" data-remove-compare="${esc(record.id)}" aria-label="${esc(record.name)} 비교에서 제외">비교에서 제외 ×</button><h3><button type="button" class="name-button" data-open="${esc(record.id)}">${esc(record.name)}</button></h3><p class="english">${esc(record.english)}</p><p class="comparison-rating">${score===null?'만족도 근거 부족':`추정 종합 ★ ${score.toFixed(1)}`}</p><dl class="comparison-meta">${meta.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value||'미확인')}</dd></div>`).join('')}</dl>${ReviewPresentation.hex(record,stage,ReviewPresentation.comparisonGroup(rows))}<details class="comparison-flavors"><summary>세부 점수</summary><h4>${labels[stage]||'전체'} 향미 프로파일</h4><p class="unknown">향미의 두드러짐 · ${sensoryScale(record)}</p>${axes.length?axes.map(axis=>{const value=p[axis],known=Number.isFinite(value);return `<div class="compare-flavor-row"><span>${esc(axis)}</span><div class="flavor-track"><i style="width:${known?Math.max(0,Math.min(100,value/sensoryMax(record)*100)):0}%"></i></div><b>${known?value.toFixed(1):'—'}</b></div>`;}).join(''):'<p class="unknown">이 단계의 향미 정보가 없습니다.</p>'}</details><section class="comparison-strength">${strengthBars(record)}</section><button type="button" class="action-button primary" data-recommend="${esc(record.id)}">이 제품과 비슷한 한 잔</button></article>`;
+    return `<article class="comparison-card"><div class="comparison-photo">${photo(record)}</div><button class="action-button" type="button" data-remove-compare="${esc(record.id)}" aria-label="${esc(record.name)} 비교에서 제외">비교에서 제외 ×</button><h3><button type="button" class="name-button" data-open="${esc(record.id)}">${esc(record.name)}</button></h3><p class="english">${esc(record.english)}</p><p class="comparison-rating">${score===null?'만족도 근거 부족':`${record.rating?.score!=null?'내 별점':'추정 종합'} ★ ${score.toFixed(1)}`}</p><dl class="comparison-meta">${meta.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value||'미확인')}</dd></div>`).join('')}</dl>${ReviewPresentation.hex(record,stage,ReviewPresentation.comparisonGroup(rows))}<details class="comparison-flavors"><summary>세부 점수</summary><h4>${labels[stage]||'전체'} 향미 프로파일</h4><p class="unknown">향미의 두드러짐 · ${sensoryScale(record)}</p>${axes.length?axes.map(axis=>{const value=p[axis],known=Number.isFinite(value);return `<div class="compare-flavor-row"><span>${esc(axis)}</span><div class="flavor-track"><i style="width:${known?Math.max(0,Math.min(100,value/sensoryMax(record)*100)):0}%"></i></div><b>${known?value.toFixed(1):'—'}</b></div>`;}).join(''):'<p class="unknown">이 단계의 향미 정보가 없습니다.</p>'}</details><section class="comparison-strength">${strengthBars(record)}</section><button type="button" class="action-button primary" data-recommend="${esc(record.id)}">이 제품과 비슷한 한 잔</button></article>`;
   }).join('')}</div>`;
   hydrateImages($('#comparison-content'));
 }
@@ -220,6 +225,8 @@ async function startArchive(data){
   $('#discovery-nav').hidden=state.mode!=='static';
   if(state.mode==='static'){
     initializeSharedBoards(data);
+    await BrowserWorkspace.init(data,archiveKey,archiveScope);
+    for(const [selector,values] of [['#type',state.reviews.map(r=>r.catalog.primary_type)],['#cask',state.reviews.flatMap(r=>r.catalog.casks||[])],['#subtype',state.reviews.flatMap(r=>r.catalog.subtypes||[])]]){$(selector).length=1;fillOptions(selector,values);}
     $('#rec-category').innerHTML='';fillOptions('#rec-category',state.reviews.filter(r=>!r.is_collection).map(r=>r.category));
     if(state.reviews.some(r=>r.category==='위스키'))$('#rec-category').value='위스키';
     refreshRecommendationInputs();updateCompareControls();
@@ -228,6 +235,8 @@ async function startArchive(data){
   if(state.profileEditsIncluded)$('.method-note').innerHTML=sentenceText('향미와 전체 강도에는 작성자가 수정한 값이 반영되며, 수정하지 않은 항목은 원문 기반 추정입니다. 향미는 제품별로 표시한 척도, 전체 강도는 0~5의 별도 척도입니다. 만족도는 원문 기반 추정이며 개인 별점·메모는 공개하지 않습니다.');
   $('#updated').textContent=`데이터 생성 ${new Date(data.generated_at).toLocaleDateString('ko-KR')}`;await render();trackView('/');
 }
+BrowserWorkspace.wire();
+BrowserWorkbook.wire();
 (async()=>{
   const config=await requestJson('./public-config.json');state.mode=config.mode;state.profileEditsIncluded=Boolean(config.profile_edits_included);$('.visitor-strip').hidden=state.mode==='static';
   if(config.access_mode==='encrypted-link'){
