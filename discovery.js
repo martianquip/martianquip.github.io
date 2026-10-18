@@ -2,15 +2,15 @@
 // Review-note overlap, not a probability of enjoyment. Missing notes are not measured zeros.
 const Discovery = (()=>{
   const stages=['nose','palate','finish'];
-  const valid=f=>f&&typeof f.family==='string'&&f.family.length>0&&Number.isFinite(f.value)&&f.value>=0&&f.value<=4.5;
+  const valid=(f,max=4.5)=>f&&typeof f.family==='string'&&f.family.length>0&&Number.isFinite(f.value)&&f.value>=0&&f.value<=max;
   function profile(record,stage='all'){
     // Starter references record presence only; they have no authored stage notes.
     if(record.starter===true)return stage==='all'?Object.fromEntries(Object.entries(record.reference_profile||{}).filter(([family,value])=>family.trim()&&value===1)):{};
     const selected=stage==='all'?stages:stages.includes(stage)?[stage]:[];
     const values=new Map();
     for(const part of selected){
-      const fruits=(record.fruit_features||[]).filter(f=>f.stage===part&&valid(f));
-      const core=(record.features||[]).filter(f=>f.stage===part&&valid(f)&&(!fruits.length||!['과일','시트러스'].includes(f.family)));
+      const fruits=(record.profile_schema==='martianquip-npf-17-v1'?[]:record.fruit_features||[]).filter(f=>f.stage===part&&valid(f));
+      const core=(record.features||[]).filter(f=>f.stage===part&&valid(f,record.profile_schema==='martianquip-npf-17-v1'?5:4.5)&&(!fruits.length||!['과일','시트러스'].includes(f.family)));
       const known=new Map([...core,...fruits].map(f=>[f.family,f.value]));
       for(const [family,value] of known){if(!values.has(family))values.set(family,[]);values.get(family).push(value);}
     }
@@ -35,8 +35,9 @@ const Discovery = (()=>{
     let anchor;
     if(mode==='custom'){
       const available=new Set(axes(pool,category,stage));
-      anchor=Object.fromEntries(Object.entries(weights||{}).filter(([key,value])=>available.has(key)&&Number.isFinite(value)&&value>0&&value<=4.5));
-      if(!Object.keys(anchor).length)return empty('원하는 향미를 하나 이상 0.5~4.5로 선택해 주세요.');
+      const max=pool.some(record=>record.profile_schema==='martianquip-npf-17-v1')?5:4.5;
+      anchor=Object.fromEntries(Object.entries(weights||{}).filter(([key,value])=>available.has(key)&&Number.isFinite(value)&&value>0&&value<=max));
+      if(!Object.keys(anchor).length)return empty(`원하는 향미를 하나 이상 0.5~${max}로 선택해 주세요.`);
     }else{
       const record=pool.find(r=>r.id===seed);
       if(!record)return empty('이 분류의 기준 제품을 선택해 주세요.');

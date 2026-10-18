@@ -4,7 +4,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex, nofollow, noarchive">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: https:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
   <meta name="description" content="MARTIANQUIP · 마시는 큅의 위스키와 음료 리뷰, 향·맛·여운 기록">
   <title>MARTIANQUIP · Taste Atlas</title>
   <link rel="icon" href="./brand.png?v=mq-monster-20260929" type="image/png">
@@ -13,7 +13,11 @@
   <script src="./discovery.js?v=npf-fixed-three-won-20260930" defer></script>
   <link rel="stylesheet" href="./journey.css?v=npf-fixed-three-won-20260930">
   <script src="./journey.js?v=npf-fixed-three-won-20260930" defer></script>
-  <script src="./public-view.js?v=npf-fixed-three-won-20260930" defer></script>
+  <script src="./review-presentation.js?v=compact-hex-20261018" defer></script>
+  <script src="./public-view.js?v=boards-20261018" defer></script>
+  <link rel="stylesheet" href="./review-presentation.css?v=square-cards-20261018">
+  <link rel="stylesheet" href="./whisky-tree.css?v=20261018"><link rel="stylesheet" href="./tier-maker.css?v=20261018"><link rel="stylesheet" href="./public-boards.css?v=20261018">
+  <script src="./whisky-tree.js?v=20261018" defer></script><script src="./tier-maker.js?v=single-row-20261018" defer></script><script src="./public-boards.js?v=20261018" defer></script>
 </head>
 <body>
   <header class="site-header"><a class="brand" href="./" aria-label="MARTIANQUIP 홈"><img src="./brand.png?v=mq-monster-20260929" width="56" height="56" alt=""><span class="brand-copy">MARTIANQUIP<small>TASTE ATLAS</small></span></a><a class="blog-link" href="https://blog.naver.com/martianquip" target="_blank" rel="noopener noreferrer">블로그 ↗</a></header>
@@ -23,6 +27,8 @@
       <button type="button" data-view="library" aria-pressed="true">리뷰 서재</button>
       <button type="button" data-view="recommend" aria-pressed="false">취향 추천</button>
       <button type="button" data-view="compare" aria-pressed="false">나란히 비교 <span id="compare-count">0</span></button>
+      <button type="button" data-view="whisky-tree" aria-pressed="false" hidden>위스키 트리</button>
+      <button type="button" data-view="tier-maker" aria-pressed="false" hidden>티어메이커</button>
     </nav>
     <div id="library-view" data-view-panel="library" tabindex="-1">
     <section class="hero"><p class="eyebrow">향과 맛을 따라가는 리뷰 아카이브</p><h1>한 잔에 담긴<br><em>서로 다른 이야기.</em></h1><p><span class="sentence">위스키, 에너지드링크, 전통주부터 한 번쯤 궁금했던 음료까지.</span> <span class="sentence">종류와 캐스크를 고르고, 향·맛·여운을 살펴보세요.</span></p><div id="summary" class="hero-stat">리뷰를 불러오는 중…</div></section>
@@ -54,6 +60,8 @@
       <div class="comparison-toolbar"><label>향미 그래프<select id="compare-stage"><option value="all">전체</option><option value="nose">향</option><option value="palate">맛</option><option value="finish">여운</option></select></label><div><button class="action-button" type="button" data-view="library">제품 추가</button><button class="quiet-button" id="clear-compare" type="button">모두 비우기</button></div></div>
       <div id="comparison-content"><div class="empty"><h3>비교할 제품을 담아 주세요.</h3><p>리뷰 서재의 제품 카드에서 ‘비교에 담기’를 누르면 여기에 모입니다.</p></div></div>
     </section>
+    <section id="whisky-tree-view" data-view-panel="whisky-tree" tabindex="-1" hidden><p class="board-notice">작성자가 게시한 최신 보드입니다. 여기서 편집한 내용은 이 탭에서만 유지되며 새로고침하면 게시본으로 돌아갑니다. 결과는 PNG·JSON으로 저장하세요.</p><div id="shared-tree"></div></section>
+    <section id="tier-maker-view" data-view-panel="tier-maker" tabindex="-1" hidden><p class="board-notice">작성자가 게시한 최신 보드입니다. 여기서 편집한 내용은 이 탭에서만 유지되며 새로고침하면 게시본으로 돌아갑니다. 결과는 PNG·JSON으로 저장하세요.</p><div id="shared-tiers"></div></section>
     <div id="compare-tray" class="compare-tray" hidden><span id="tray-summary"></span><button class="action-button primary" type="button" data-view="compare">나란히 비교 <span aria-hidden="true">→</span></button><button class="quiet-button" id="tray-clear" type="button">비우기</button></div>
     <p id="discovery-status" class="discovery-status" role="status" aria-live="polite"></p>
     <p class="method-note"><span class="sentence">향미 점수와 만족도는 원문 표현을 바탕으로 추정한 초안입니다.</span> <span class="sentence">향미는 0.5~4.5, 전체 강도는 0~5의 별도 척도이며, 근거가 부족한 항목은 비워 두었습니다.</span></p>

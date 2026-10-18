@@ -1,0 +1,6 @@
+#whisky-tree-view,#tier-maker-view{padding:24px 0;--muted:#777;--line:#dce1d5;--ink:#283c32;--paper:#f8f7f2}
+.board-notice{padding:12px 16px;background:#edf1e7;border-radius:8px;font-size:13px;line-height:1.7}
+#whisky-tree-view .btn,#tier-maker-view .btn{padding:8px 12px;border:1px solid #dce1d5;border-radius:6px;background:#fff;color:#283c32;cursor:pointer}
+#whisky-tree-view .btn:disabled,#tier-maker-view .btn:disabled{opacity:.45;cursor:default}
+#whisky-tree-view input,#whisky-tree-view select,#tier-maker-view input,#tier-maker-view select{padding:7px;border:1px solid #dce1d5;border-radius:5px;background:#fff;color:#283c32}
+#archive:has(#whisky-tree-view:not([hidden])),#archive:has(#tier-maker-view:not([hidden])){max-width:none;margin:0 24px}

@@ -60,7 +60,7 @@ window.WhiskyJourney = (() => {
   }
   function notes(record) {
     // Unmeasured/zero specific fruits must not hide a positive generic fruit note.
-    const source = {features:record.features,fruit_features:(record.fruit_features || []).filter(feature => positive(feature.value))};
+    const source = {profile_schema:record.profile_schema,features:record.features,fruit_features:(record.fruit_features || []).filter(feature => positive(feature.value))};
     return `<dl class="wj-notes">${[['nose','N','향'],['palate','P','맛'],['finish','F','여운']].map(([stage,letter,label]) => {
       const top = Object.entries(Discovery.profile(source,stage)).filter(([,value]) => positive(value)).sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0],'ko')).slice(0,3);
       return `<div class="wj-note"><dt><span class="wj-stage-letter" lang="en">${letter}</span>${label}</dt><dd>${Array.from({length:3},(_,index) => `<span class="wj-note-tag">${esc(top[index]?.[0] || '미확인')}</span>`).join('')}</dd></div>`;
